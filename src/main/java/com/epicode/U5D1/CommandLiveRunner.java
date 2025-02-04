@@ -28,13 +28,17 @@ public class CommandLiveRunner {
 	}
 
 	public static void printTavoli(List<Tavolo> tavoli) {
-		System.out.println("*******Ordinazioni per Tavolo*******");
+		System.out.println("*******Elenco Tavoli*******");
 
 		tavoli.forEach(tavolo -> {
 			System.out.println("Tavolo numero: " + tavolo.getNTavolo());
 			System.out.println("Numero massimo di coperti: " + tavolo.getNCopertiMassimo());
 			System.out.println("Stato tavolo: " + tavolo.getStato());
-			
+			if (tavolo.hasOrdine()) {
+				System.out.println("Ordine associato al tavolo: " + tavolo.getOrdine());
+			} else {
+				System.out.println("Nessun ordine per questo tavolo.");
+			}
 			System.out.println("------------------------------");
 		});
 	}

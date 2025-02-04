@@ -1,9 +1,11 @@
 package com.epicode.U5D1.entities;
 
+import com.epicode.U5D1.Enum.StatoOrdine;
 import com.epicode.U5D1.Enum.StatoTavolo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +120,13 @@ public class AppConfig {
 		tavoli.add(new Tavolo(3, 6, StatoTavolo.OCCUPATO));
 		return tavoli;
 	}
+	@Bean(name = "ordine")
+	public Ordine ordineBean() {
+		Tavolo tavolo = new Tavolo(1, 4, StatoTavolo.LIBERO);
+		List<Menu> menuList = new ArrayList<>();
+		menuList.add(menuBean());
 
+		return new Ordine(tavolo, menuList, 1, StatoOrdine.IN_PREPARAZIONE, 4, LocalDateTime.now());
 
+	}
 }

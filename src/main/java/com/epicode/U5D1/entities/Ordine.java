@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Getter
-@ToString
+@ToString(exclude = "tavolo")
 public class Ordine {
 
     private Tavolo tavolo;
@@ -28,7 +29,7 @@ public class Ordine {
 
     public Ordine(Tavolo tavolo, List<Menu> ordini, int nOrdine, StatoOrdine stato, int nCoperti, LocalDateTime oraAcquisizione) {
         this.tavolo = tavolo;
-        this.ordini = ordini;
+        this.ordini =  ordini != null ? ordini : new ArrayList<>();;
         this.nOrdine = nOrdine;
         this.stato = stato;
         this.nCoperti = nCoperti;
@@ -36,19 +37,24 @@ public class Ordine {
         this.conto = calcolaConto();
     }
 
-    // Metodo per calcolare il conto totale
+    private double getPrezzoCoperto() {
+        return nCoperti * prezzoCoperto;
+    }
+
+    // Metodo per calcolare il conto
     private double calcolaConto() {
+        System.out.println("Numero di coperti: " + nCoperti);
+        System.out.println("Prezzo coperto: " + prezzoCoperto);
         double sommaPizze = ordini.stream()
-                .flatMap(menu -> menu.getPizzaList().stream()) // Stream di pizze dal menu
-                .mapToDouble(Pizza::getPrice)  // Somma dei prezzi delle pizze
+                .flatMap(menu -> menu.getPizzaList().stream())
+                .mapToDouble(Pizza::getPrice)
                 .sum();
 
-        sommaPizze += ordini.stream()
-                .flatMap(menu -> menu.getDrinkList().stream()) // Stream di bevande dal menu
-                .mapToDouble(Drink::getPrice)  // Somma dei prezzi delle bevande
+        double sommaBevande = ordini.stream()
+                .flatMap(menu -> menu.getDrinkList().stream())
+                .mapToDouble(Drink::getPrice)
                 .sum();
-
-        return sommaPizze + (nCoperti * prezzoCoperto); // Aggiunge il costo del coperto
+        return sommaPizze + sommaBevande + getPrezzoCoperto();
     }
 
 

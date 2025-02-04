@@ -8,7 +8,7 @@ public class Drink extends Item {
 	private String name;
 
 	public Drink(String name, int calories, double price) {
-		super(calories, price);  // Passiamo calorie e prezzo alla superclasse
+		super(calories, price);
 		this.name = name;
 	}
 
